@@ -1,5 +1,14 @@
 {
   "dependencies": {
     "cors": "^2.8.5"
-  }
+  },
+
+  "scripts": {
+  "start": "serve ."
+},
+
+"dependencies": {
+  "cors": "^2.8.5",
+  "serve": "^14.2.0"
+}
 }
