@@ -1,43 +1,36 @@
-<head>
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Consumo de REST API</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
   <body>
-    <p>
-
-     <h1>Consumo de REST-API de Usuarios POSTGRESQL</h1>
-
-    </p>
+    <h1>Consumo de REST-API de Usuarios POSTGRESQL</h1>
 
     <div>
       <label>Name </label>
-      <input type="text" id="name">
+      <input type="text" id="name" />
     </div>
 
     <div>
       <label>Email </label>
-      <input type="text" id="email">
+      <input type="text" id="email" />
     </div>
 
     <div>
       <label>Age </label>
-      <input type="text" id="age">
+      <input type="text" id="age" />
     </div>
 
     <div>
       <label>Comments </label>
-      <input type="text" id="comments">
+      <input type="text" id="comments" />
     </div>
 
-    <button onclick="postUser()"> POST user </button>
-    <button onclick="getUsers()"> GET usuarios </button>
-    <button id="updateBtn" onclick="updateUser()" style="display:none;">Actualizar usuario</button>
-
-    
-
-
+    <button onclick="postUser()">POST user</button>
+    <button onclick="getUsers()">GET usuarios</button>
+    <button id="updateBtn" onclick="updateUser()" style="display: none">Actualizar usuario</button>
 
     <div id="resultado"></div>
 
@@ -45,4 +38,3 @@
     <script src="callrestapi.js"></script>
   </body>
 </html>
-

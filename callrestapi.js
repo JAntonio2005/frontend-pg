@@ -1,6 +1,4 @@
-
 var url = "https://pg-restapi-wcv0.onrender.com/api/users";
-
 let selectedUserId = null;
 
 function postUser() {
@@ -22,7 +20,6 @@ function postUser() {
         age: myAge,
         comments: myComments
     };
-    console.log(myuser);
 
     $.ajax({
         url: url,
@@ -31,27 +28,18 @@ function postUser() {
         contentType: 'application/json',
         data: JSON.stringify(myuser),
         success: function (data) {
-            console.log(data);
             alert('Usuario agregado correctamente');
             clearForm();  
             $('#resultado').html(JSON.stringify(data.user));
-        },
-       
+        }
     });
 }
 
 function getUsers() {
-    console.log(url);
-
     $.getJSON(url, function(json) {
-        console.log(json);
-
         var arrUsers = json.users;
-
         var htmlTableUsers = '<table border="1">';
-
         arrUsers.forEach(function(item, index) {
-            console.log(item);
             htmlTableUsers += `
                 <tr>
                     <td>${index + 1}</td>
@@ -59,23 +47,19 @@ function getUsers() {
                     <td>${item.email}</td>
                     <td>${item.age}</td>
                     <td>${item.comments}</td>
-                <td>
-                <button onclick="deleteUser(${item.id})">Eliminar</button>
-                <button onclick="fillForm(${item.id}, '${item.name}', '${item.email}', ${item.age}, '${item.comments}')">Editar</button>
-
-            </td>
-        </tr>
-    `;
-});
-     htmlTableUsers += '</table>';
-
+                    <td>
+                        <button onclick="deleteUser(${item.id})">Eliminar</button>
+                        <button onclick="fillForm(${item.id}, '${item.name}', '${item.email}', ${item.age}, '${item.comments}')">Editar</button>
+                    </td>
+                </tr>`;
+        });
+        htmlTableUsers += '</table>';
         $('#resultado').html(htmlTableUsers);
     });
 }
 
 function deleteUser(id) {
-    const confirmar = confirm("¿Deseas eliminar este usuario?");
-    if (!confirmar) return;
+    if (!confirm("¿Deseas eliminar este usuario?")) return;
 
     $.ajax({
         url: `${url}/${id}`,
@@ -89,6 +73,7 @@ function deleteUser(id) {
         }
     });
 }
+
 function updateUser() {
     if (!selectedUserId) {
         alert("Primero selecciona un usuario con el botón Editar");
@@ -116,7 +101,7 @@ function updateUser() {
             alert("Usuario actualizado correctamente");
             getUsers();
             clearForm();
-            $('#updateBtn').hide(); // ocultar botón actualizar
+            $('#updateBtn').hide();
             selectedUserId = null;
         },
         error: function (err) {
@@ -131,19 +116,14 @@ function fillForm(id, name, email, age, comments) {
     $('#age').val(age);
     $('#comments').val(comments);
     selectedUserId = id;
-
-    $('#updateBtn').show(); // muestra botón actualizar
+    $('#updateBtn').show();
 }
 
-
-
-// Limpiar inputs
 function clearForm() {
     $('#name').val('');
     $('#email').val('');
     $('#age').val('');
     $('#comments').val('');
     selectedUserId = null;
-    $('#updateBtn').hide(); 
-
+    $('#updateBtn').hide();
 }
