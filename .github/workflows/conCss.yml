@@ -1,0 +1,32 @@
+name: CI/CD deploy master
+
+on: 
+  push:
+    branches: [ "master" ]
+
+jobs:
+  ci_cd_deploy_master:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:${{ github.sha }} .
+      - name: Tag image as latest
+        run: |
+          docker tag ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:${{ github.sha }} \
+            ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:latest
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: Push Docker image (SHA)
+        run: docker push ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:${{ github.sha }}
+
+      - name: Push Docker image (latest)
+        run: docker push ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:latest
