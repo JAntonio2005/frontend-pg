@@ -1,4 +1,6 @@
+
 var url = "http://localhost:3000/api/users";
+
 let selectedUserId = null;
 
 function postUser() {
@@ -143,4 +145,5 @@ function clearForm() {
     $('#comments').val('');
     selectedUserId = null;
     $('#updateBtn').hide(); 
+
 }
