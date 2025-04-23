@@ -9,38 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: hello world
-        run: echo 'hello universe'
-
-      - name: run httpd image
-        run: docker run -d --name serving_base httpd
-
-      - name: copy frontend files to container
-        run: docker cp . serving_base:/usr/local/apache2/htdocs
-
-      - name: verify index.html exists
-        run: docker exec serving_base test -f /usr/local/apache2/htdocs/index.html
-
-      - name: build custom image from container
+      - name: Build Docker image
         run: |
-          docker commit --change "ENV MODEL_NAME ${{ secrets.MODEL_NAME }}" \
-            serving_base ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:${{ github.sha }}
+          docker build -t ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:${{ github.sha }} .
 
-      - name: tag image as latest
+      - name: Tag image as latest
         run: |
           docker tag ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:${{ github.sha }} \
             ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:latest
 
-      - name: docker login
+      - name: Docker login
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
-      - name: docker push sha
+      - name: Push Docker image (SHA)
         run: docker push ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:${{ github.sha }}
 
-      - name: docker push latest
+      - name: Push Docker image (latest)
         run: docker push ${{ secrets.DOCKER_USER }}/${{ secrets.MODEL_NAME }}:latest
+
